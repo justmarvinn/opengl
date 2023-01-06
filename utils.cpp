@@ -1,23 +1,23 @@
-#include "Utils.h"
+#include "utils.h"
 
-std::string Utils::ParseText(const char* filename)
+std::string utils::parseText(std::string filename)
 {
     std::ifstream file;
     file.open(filename);
     std::string res = "";
 
-    if (!file) {
-        std::cerr << "Can not open file" << std::endl;
-    } else {
+    if (!file)
+        std::cerr << "Can not open file " << filename << std::endl;
+    else {
         std::string line;
         while (std::getline(file, line)) 
-            res += line + "\n";        
+            res += line + '\n'; 
     }
     file.close();
-    return res;
+    return res + '\0';
 }
 
-std::string Utils::ParseFormat(std::string filename) 
+std::string utils::parseFormat(std::string filename) 
 {
     if (filename.find(".") != std::string::npos)
         return filename.substr(filename.find_last_of("."));

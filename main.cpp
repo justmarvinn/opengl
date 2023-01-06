@@ -1,75 +1,107 @@
 #include <iostream>
 #include <string>
+#include <array>
 
-#include <GL/glew.h>
-#include <GL/gl.h>
-#include <GL/glext.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Window.h"
-#include "graphics/Shader.h"
-#include "graphics/VAO.h"
+#include "utils.h"
+#include "ShaderProgram.h"
+#include "VAO.h"
+#include "VBO.h"
+#include "EBO.h"
 
-const int WIDTH = 800;
-const int HEIGHT = 600;
+using namespace jengine::graphics;
 
-const std::vector<float> q1Vertices = {
-	-1, 1, 0,
-	 0, 1, 0,
-	 0, 0, 0,
-	-1, 0, 0,
-};
-const std::vector<float> q2Vertices = {
-	0,  0, 0,
-	1,  0, 0,
-	1, -1, 0,
-	0, -1, 0,
-};
-const std::vector<float> fullScreenQuad = {
-    -1,  1, 0,
-     1,  1, 0,
-     1, -1, 0,
-    -1, -1, 0,
-};
-// const std::vector<float> tVertices = {
-//     -1, -1, 0,
-//      1, -1, 0,
-//      0,  1, 0,
-// };
+void framebuffer_size_callback(GLFWwindow* window, int width, int height); 
+void error_callback(int err, const char* description);
 
-int main()
+int main(int argc, char* argv[])
 {
-	std::cout << "Hello, World!" << std::endl;
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	Window::Initialize(WIDTH, HEIGHT, "window");
-
-    Shader shader;
-    shader.addSource("../shaders/main.vert");
-    shader.addSource("../shaders/main.frag");
-    shader.Compile();
-
-    VAO vao1(GL_QUADS, 4);
-    vao1.addVBO(q1Vertices);
-
-    VAO vao2(GL_QUADS, 4);
-    vao2.addVBO(q2Vertices);
-
-    VAO fsVao(GL_QUADS, 4);
-    fsVao.addVBO(fullScreenQuad);
-
-    // VAO vao(GL_TRIANGLES, 3);
-    // vao.addVBO(tVertices);
-
-	while (!Window::isShouldClose()) {
-        shader.Use();
-        // vao.Render();
-        fsVao.Render();
-        // vao1.Render();
-        // Shader::StopUsingShader();
-        // vao2.Render();
-		Window::Update();
+    GLFWwindow* window = glfwCreateWindow(800, 600, "hello world", NULL, NULL);
+    if (window == NULL) {
+        std::cerr << "failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
     }
-	Window::Finalize();
+    glfwMakeContextCurrent(window);
 
-	return 0;
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        std::cerr << "Failed to initialize GLAD" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    
+    glViewport(0, 0, 800, 600);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetErrorCallback(error_callback);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); */
+
+    std::array<float, 6*4> vertices = {
+         1, -1, 0, 1, 0, 0, // bottom right
+        -1, -1, 0, 0, 1, 0,// bottom left
+        -1,  1, 0, 0, 0, 1,// top left
+         1,  1, 0, 0, 1, 0,// top right
+    };
+    std::array<unsigned int, 3*2> indices = {
+        0, 1, 2,
+        2, 3, 0,
+    };
+
+    std::array<float, 6*3> triangle = {
+          0,  .5, 0, 1, 0, 0,
+         .5, -.5, 0, 0, 1, 0,
+        -.5, -.5, 0, 0, 0, 1,
+    };
+
+    VAO vao;
+    VBO vbo = VBO();
+    EBO ebo = EBO();
+    vbo.setData(vertices);
+    ebo.setData(indices);
+    vao.setVertexAttribute(&vbo, 0, 3, 6, 0);
+    /* vao.setVertexAttribute(&vbo, 1, 3, 6, false, 3); */
+
+    ShaderProgram shader;
+    shader.addSource("../shaders/noise.vert");
+    shader.addSource("../shaders/noise.frag");
+    shader.link();
+
+    while (!glfwWindowShouldClose(window)) {
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        shader.use();
+        int h, w;
+        glfwGetWindowSize(window, &w, &h);
+        shader.setUniform("screenSize", w, h);
+        shader.setUniform("octaves", 1);
+        vao.renderEBO(&ebo, 6);
+
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            glfwSetWindowShouldClose(window, true);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+    return 0;
+}
+
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+void error_callback(int err, const char* description)
+{
+    std::cerr << description << std::endl;
 }
