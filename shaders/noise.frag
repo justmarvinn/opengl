@@ -1,10 +1,11 @@
+#version 330 core
 
 in vec3 pos;
 
 out vec4 FragColor;
 
 uniform ivec2 screenSize;
-uniform int octaves;
+/* uniform int octaves; */
 
 float map(float value, float min1, float max1, float min2, float max2)
 {
@@ -40,4 +41,10 @@ void main()
 
     FragColor = vec4(t, t, t, 1);
     /* FragColor = vec4(tmp, tmp, tmp, 1); */
+
+    /* vec3 p; */
+    /* p.x = map(pos.x, -1, 1, 0, 1); */
+    /* p.y = map(pos.y, -1, 1, 0, 1); */
+    /* p.z = map(pos.z, -1, 1, 0, 1); */
+    /* FragColor = vec4(p, 1); */
 }

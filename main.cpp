@@ -5,11 +5,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "utils.h"
-#include "ShaderProgram.h"
-#include "VAO.h"
-#include "VBO.h"
-#include "EBO.h"
+#include "graphics/ShaderProgram.h"
+#include "graphics/VAO.h"
+#include "graphics/VBO.h"
+#include "graphics/EBO.h"
 
 using namespace jengine::graphics;
 
