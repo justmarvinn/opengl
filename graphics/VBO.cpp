@@ -21,3 +21,8 @@ void VBO::useNoVBO()
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+std::size_t VBO::size()
+{
+    return _size;
+}

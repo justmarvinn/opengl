@@ -7,6 +7,17 @@ ShaderProgram::ShaderProgram()
     _id = glCreateProgram();
 }
 
+ShaderProgram::ShaderProgram(unsigned int numShaders, ...) //, std::string filename, ...)
+{
+    _id = glCreateProgram();
+    va_list args;
+    va_start(args, numShaders);
+    while (numShaders--) {
+        addSource(va_arg(args, const char*));
+    }
+    va_end(args);
+}
+
 ShaderProgram::~ShaderProgram()
 {
     glDeleteProgram(_id);
@@ -137,4 +148,11 @@ void ShaderProgram::setUniform(std::string name, int x, int y)
     /*     return; */
     /* } */
     glUniform2i(location, x, y);
+}
+
+void ShaderProgram::setUniformTexture(std::string name, texture2d& texture)
+{
+    texture.use();
+    int location = glGetUniformLocation(_id, name.c_str());
+    glUniform1i(location, texture.channel());
 }

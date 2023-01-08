@@ -3,9 +3,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <stdarg.h>
 
 #include <glad/glad.h>
 
+#include "texture2d.h"
 #include "utils.h"
 
 namespace jengine::graphics
@@ -14,6 +16,7 @@ namespace jengine::graphics
     {
         public:
             ShaderProgram();
+            ShaderProgram(unsigned int numShaders, ...);
             ~ShaderProgram();
             void link();
             void addSource(std::string filename);
@@ -27,6 +30,8 @@ namespace jengine::graphics
 
             void setUniform(std::string name, int x);
             void setUniform(std::string name, int x, int y);
+
+            void setUniformTexture(std::string name, texture2d& texture);
 
         private:
             unsigned int _id;

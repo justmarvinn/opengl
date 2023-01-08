@@ -21,3 +21,8 @@ void EBO::useNoEBO()
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
+
+std::size_t EBO::size()
+{
+    return _size;
+}

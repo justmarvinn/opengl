@@ -3,6 +3,8 @@
 #include <vector>
 #include <array>
 
+#include <glad/glad.h>
+
 #include "VBO.h"
 #include "EBO.h"
 
@@ -18,7 +20,9 @@ namespace jengine::graphics
             /* VBO* createVBO(); */
             /* EBO* createEBO(); */
             void renderVBO(VBO* vboptr, unsigned int numVertices);
+            void renderVBO(VBO* vboptr);
             void renderEBO(EBO* eboptr, unsigned int numVertices, unsigned int offset=0);
+            void renderEBO(EBO* eboptr);
             void setVertexAttribute(
                     VBO* vboptr,
                     unsigned int index,

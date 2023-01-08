@@ -10,10 +10,6 @@ VAO::VAO()
 VAO::~VAO()
 {
     glDeleteVertexArrays(1, &_id);
-    /* for (auto vbo : _VBOs) */
-    /*     delete vbo; */
-    /* for (auto ebo : _EBOs) */
-    /*     delete ebo; */
 }
 
 void VAO::_bind()
@@ -25,25 +21,6 @@ void VAO::_unbind()
 {
     glBindVertexArray(0);
 }
-
-/* VBO* VAO::createVBO() */
-/* { */
-/*     _bind(); */
-/*     VBO* vbo = new VBO(); */ 
-/*     _unbind(); */
-/*     _VBOs.push_back(vbo); */
-/*     return vbo; */
-/* } */
-
-/* EBO* VAO::createEBO() */
-/* { */
-/*     _bind(); */
-/*     EBO* ebo = new EBO(); */
-/*     _unbind(); */
-/*     _EBOs.push_back(ebo); */
-/*     return ebo; */
-
-/* } */
 
 void VAO::setVertexAttribute(
         VBO* vboptr,
@@ -85,10 +62,26 @@ void VAO::renderVBO(VBO* vboptr, unsigned int numVertices)
     _unbind();
 }
 
+void VAO::renderVBO(VBO* vboptr)
+{
+    _bind();
+    vboptr->use();
+    glDrawArrays(GL_TRIANGLES, 0, vboptr->size());
+    _unbind();
+}
+
 void VAO::renderEBO(EBO* eboptr, unsigned int numVertices, unsigned int offset)
 {
     _bind();
     eboptr->use();
-    glDrawElements(GL_TRIANGLES, numVertices, GL_UNSIGNED_INT, (void*)(offset*sizeof(GL_UNSIGNED_INT))); 
+    glDrawElements(GL_TRIANGLES, numVertices, GL_UNSIGNED_INT, (void*)(offset*sizeof(unsigned int))); 
+    _unbind();
+}
+
+void VAO::renderEBO(EBO* eboptr)
+{
+    _bind();
+    eboptr->use();
+    glDrawElements(GL_TRIANGLES, eboptr->size(), GL_UNSIGNED_INT, (void*)0);
     _unbind();
 }
