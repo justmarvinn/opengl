@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
 #include <array>
-#include <random>
-#include <vector>
 
 #include <glm/ext.hpp>
 
@@ -28,27 +26,11 @@ int main(int argc, char* argv[])
             "../res/shaders/main.frag");
     shader.link();
 
-    texture2d tex1;
-    tex1.loadImageRGB("../res/textures/smile.png", 0);
-    texture2d tex2;
-    tex2.loadImageRGB("../res/textures/container.jpg", 1);
+    texture2d tex;
+    tex.loadImageRGB("../res/textures/capy.jpg", 0);
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dist(-1.0f, 1.0f);
-
-    std::vector<glm::mat4> models;
-    for (int i=0; i<5; i++) {
-        glm::vec3 pos(dist(gen), dist(gen), dist(gen));
-        float angle = utils::map((float)(dist(gen)), -1.0f, 1.0f, 0.0f, 180.0f);
-        glm::vec3 rot(dist(gen), dist(gen), dist(gen));
-
-        glm::mat4 model(1);
-        model = glm::translate(model, pos);
-        model = glm::rotate(model, glm::radians(angle), glm::normalize(rot));
-        models.push_back(model);
-    }
-
+    glm::mat4 model(1);
+    /* model = glm::scale(model, glm::vec3(2)); */
     camera::setTarget(glm::vec3(0));
 
     while (!jengine::window::isShouldClose()) {
@@ -57,20 +39,14 @@ int main(int argc, char* argv[])
 
         float t = (float)(glfwGetTime());
         float r = 2;
-
-        camera::setPosition(glm::vec3(sin(t)*r, 0, cos(t)*r));
+        camera::setPosition(glm::vec3(sin(t)*r, r, cos(t)*r));
         
         shader.use();
-        shader.setUniform("uTime", t);
+        shader.setUniform("model", model);
         shader.setUniform("view", camera::viewMatrix());
         shader.setUniform("projection", camera::projectionMatrix());
-        shader.setUniformTexture("tex1", tex1);
-        shader.setUniformTexture("tex2", tex2);
-
-        for (auto& m : models) {
-            shader.setUniform("model", m);
-            vao.renderVBO(&vbo);
-        }
+        shader.setUniformTexture("tex", tex);
+        vao.renderVBO(&vbo);
 
         /* if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) */
         /*     glfwSetWindowShouldClose(window, true); */
@@ -80,4 +56,3 @@ int main(int argc, char* argv[])
     jengine::stop();
     return 0;
 }
-
