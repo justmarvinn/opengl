@@ -2,8 +2,9 @@
 
 using namespace jengine::graphics;
 
-VBO::VBO()
+VBO::VBO(unsigned int valuesPerVertex)
 {
+    _valuesPerVertex = valuesPerVertex;
     glGenBuffers(1, &_id);
 }
 
@@ -25,4 +26,9 @@ void VBO::useNoVBO()
 std::size_t VBO::size()
 {
     return _size;
+}
+
+unsigned int VBO::valuesPerVertex()
+{
+    return _valuesPerVertex;
 }

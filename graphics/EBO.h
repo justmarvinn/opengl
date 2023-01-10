@@ -9,6 +9,12 @@ namespace jengine::graphics
     {
         public:
             EBO();
+            template<typename T, std::size_t N>
+            EBO(const std::array<T, N>& data)
+            {
+                glGenBuffers(1, &_id);
+                setData(data);
+            }
             ~EBO();
             void use();
             static void useNoEBO();

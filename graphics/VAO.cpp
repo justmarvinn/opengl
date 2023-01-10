@@ -66,7 +66,7 @@ void VAO::renderVBO(VBO* vboptr)
 {
     _bind();
     vboptr->use();
-    glDrawArrays(GL_TRIANGLES, 0, vboptr->size());
+    glDrawArrays(GL_TRIANGLES, 0, vboptr->size() / vboptr->valuesPerVertex());
     _unbind();
 }
 

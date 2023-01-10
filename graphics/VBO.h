@@ -8,7 +8,15 @@ namespace jengine::graphics
     class VBO
     {
         public:
-            VBO();
+            VBO(unsigned int valuesPerVertex);
+            template<typename T, std::size_t N>
+            VBO(const std::array<T, N>& data, unsigned int valuesPerVertex)
+            {
+                _valuesPerVertex = valuesPerVertex;
+                _size = N;
+                glGenBuffers(1, &_id);
+                setData(data);
+            }
             ~VBO();
 
             template<typename T, std::size_t N>
@@ -22,10 +30,11 @@ namespace jengine::graphics
             void use();
             static void useNoVBO();
             std::size_t size();
+            unsigned int valuesPerVertex();
 
         private:
             unsigned int _id;
+            unsigned int _valuesPerVertex;
             std::size_t _size;
-
     };
 }
