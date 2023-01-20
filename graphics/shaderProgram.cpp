@@ -150,6 +150,12 @@ void ShaderProgram::setUniform(std::string name, int x, int y)
     glUniform2i(location, x, y);
 }
 
+void ShaderProgram::setUniform(std::string name, glm::vec3 vec)
+{
+    int location = glGetUniformLocation(_id, name.c_str());
+    glUniform3f(location, vec.x, vec.y, vec.z);
+}
+
 void ShaderProgram::setUniform(std::string name, glm::mat4& mat, bool needTransparent)
 {
     int location = glGetUniformLocation(_id, name.c_str());

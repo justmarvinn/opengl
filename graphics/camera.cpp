@@ -82,6 +82,11 @@ void camera::setTarget(glm::vec3 target)
     _target = target;
 }
 
+glm::vec3 camera::getPosition()
+{
+    return _position;
+}
+
 glm::mat4& camera::viewMatrix()
 {
     return _view;

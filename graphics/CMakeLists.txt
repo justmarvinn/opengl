@@ -10,23 +10,26 @@ add_subdirectory(./include/glad)
 add_subdirectory(./include/SOIL2)
 add_subdirectory(./include/glm)
 
-set(SOURCE_FILES
-    shaderProgram.cpp
-    VAO.cpp
-    VBO.cpp
-    EBO.cpp
-    texture2d.cpp
-    camera.cpp
-)
-set(HEADER_FILES
-    graphics.h
-    shaderProgram.h
-    VAO.h
-    VBO.h
-    EBO.h
-    texture2d.h
-    camera.h
-)
+# set(SOURCE_FILES
+#     shaderProgram.cpp
+#     VAO.cpp
+#     VBO.cpp
+#     EBO.cpp
+#     texture2d.cpp
+#     camera.cpp
+# )
+# set(HEADER_FILES
+#     graphics.h
+#     shaderProgram.h
+#     VAO.h
+#     VBO.h
+#     EBO.h
+#     texture2d.h
+#     camera.h
+# )
+
+file(GLOB SOURCE_FILES "*.cpp")
+file(GLOB HEADER_FILES "*.h")
 
 add_library(${PROJECT_NAME}
     ${SOURCE_FILES}

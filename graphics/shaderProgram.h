@@ -34,6 +34,7 @@ namespace jengine::graphics
             void setUniform(std::string name, int x);
             void setUniform(std::string name, int x, int y);
 
+            void setUniform(std::string name, glm::vec3 vec);
             void setUniform(std::string name, glm::mat4& mat, bool needTransparent=false);
 
             void setUniformTexture(std::string name, texture2d& texture);

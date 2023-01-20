@@ -12,6 +12,7 @@ namespace jengine::graphics {
             static void update();
 
             static void setPosition(glm::vec3 pos);
+            static glm::vec3 getPosition();
             /* static void setDirection(glm::vec3 dir); */
             static void setTarget(glm::vec3 target);
             static void setPerspective(float fov, float near=0.1f, float far=100.f);
