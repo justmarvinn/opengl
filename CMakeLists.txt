@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.12)
 project(app)
 
+# set(CMAKE_CXX_COMPILER )
+
 add_subdirectory(./graphics)
 
 # set(SOURCE_FILES
